@@ -1,0 +1,8 @@
+{
+  "name": "HeartGuard",
+  "description": "A mental health education platform for rural left-behind children, featuring AI companionship, art therapy, and psychological assessment.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

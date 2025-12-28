@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HeartGuard - 开启心灵守护之旅</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+  
+  <!-- React & Lucide Icons -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/lucide@0.263.1/dist/umd/lucide.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Nunito', 'Noto Sans SC', sans-serif;
+      background-color: #6366f1; /* 初始背景色 */
+      transition: background-color 0.5s ease;
+      overflow: hidden;
+    }
+
+    /* 装饰性背景圆圈 */
+    .bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 0;
+    }
+
+    /* 动画 */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+    .animate-float {
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .btn-bouncy:active {
+      transform: scale(0.95);
+    }
+
+    /* 淡入淡出切换效果 */
+    .fade-transition {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen relative">
+
+  <div id="root" class="relative z-10 w-full flex justify-center p-4"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    const TutorialModal = () => {
+      const [step, setStep] = useState(0);
+
+      const steps = [
+        {
+          title: "欢迎来到 HeartGuard! 👋",
+          desc: "我是你的 AI 心理辅导伙伴。在这里，你可以找人倾诉、发挥创意、探索内心。让我们开始一段温暖的旅程吧！",
+          icon: "HeartHandshake",
+          color: "bg-indigo-500",
+          bodyBg: "#6366f1"
+        },
+        {
+          title: "找康康聊天 🐻",
+          desc: "无论开心还是难过，康康老师都在这里陪着你。你可以问我任何问题，我会为你保守秘密，做你最忠实的听众。",
+          icon: "MessageCircle",
+          color: "bg-sky-500",
+          bodyBg: "#0ea5e9"
+        },
+        {
+          title: "小小画室 🎨",
+          desc: "发挥你的想象力！告诉我你想画什么，或者随手画几笔线条，我会用魔法把它们变成精美的画作。",
+          icon: "ImageIcon",
+          color: "bg-amber-500",
+          bodyBg: "#f59e0b"
+        },
+        {
+          title: "成长日记 📘",
+          desc: "在这里做心理体检，阅读有趣的魔法故事，还能在宝藏书屋里发现许多有用的小知识。",
+          icon: "BookOpen",
+          color: "bg-emerald-500",
+          bodyBg: "#10b981"
+        }
+      ];
+
+      useEffect(() => {
+        // 同步修改页面背景色
+        document.body.style.backgroundColor = steps[step].bodyBg;
+      }, [step]);
+
+      const handleNext = () => {
+        if (step < steps.length - 1) setStep(step + 1);
+        else alert("这就带你去主界面！(此处在实际App中会关闭模态框)");
+      };
+
+      const handlePrev = () => {
+        if (step > 0) setStep(step - 1);
+      };
+
+      // 渲染 Lucide 图标
+      const IconComponent = ({ name, color }) => {
+        useEffect(() => {
+          lucide.createIcons();
+        }, [step]);
+        return <i data-lucide={name.toLowerCase()} className={`w-12 h-12 ${color}`}></i>;
+      };
+
+      return (
+        <div className="bg-white w-full max-w-md rounded-[48px] shadow-2xl overflow-hidden border-8 border-white relative fade-transition transform scale-100">
+          
+          {/* 顶部彩色背景区域 */}
+          <div className={`h-56 transition-colors duration-700 relative flex items-center justify-center ${steps[step].color}`}>
+            <div className="absolute top-[-30%] left-[-10%] w-64 h-64 bg-white/20 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-[-20%] right-[-5%] w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+            
+            <div className="w-28 h-28 bg-white rounded-full flex items-center justify-center shadow-2xl relative z-10 ring-8 ring-white/30 animate-float">
+              <IconComponent name={steps[step].icon} color={steps[step].color.replace('bg-', 'text-')} />
+              {step === 0 && (
+                <div className="absolute -top-2 -right-2 bg-yellow-400 text-white p-2 rounded-full shadow-lg">
+                  <i data-lucide="star" className="w-4 h-4 fill-current"></i>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* 内容区域 */}
+          <div className="pt-10 pb-10 px-10 text-center">
+            <h2 className="text-3xl font-black text-gray-800 mb-4 transition-all duration-500">
+              {steps[step].title}
+            </h2>
+            <p className="text-gray-500 font-bold leading-relaxed mb-10 h-24 flex items-center justify-center">
+              {steps[step].desc}
+            </p>
+
+            {/* 进度指示器 */}
+            <div className="flex justify-center gap-3 mb-10">
+              {steps.map((_, i) => (
+                <div 
+                  key={i} 
+                  className={`h-2.5 rounded-full transition-all duration-500 ${i === step ? `w-12 ${steps[step].color}` : 'w-2.5 bg-gray-200'}`}
+                ></div>
+              ))}
+            </div>
+
+            {/* 按钮组 */}
+            <div className="flex gap-4">
+               {step > 0 ? (
+                 <button 
+                  onClick={handlePrev} 
+                  className="flex-1 py-4 rounded-3xl font-black text-gray-500 bg-gray-100 hover:bg-gray-200 transition-all flex items-center justify-center gap-2 btn-bouncy"
+                 >
+                   <i data-lucide="chevron-left" className="w-5 h-5"></i> 上一步
+                 </button>
+               ) : (
+                 <button 
+                  className="flex-1 py-4 rounded-3xl font-black text-gray-300 transition-all cursor-default"
+                 >
+                   欢迎
+                 </button>
+               )}
+               
+               <button 
+                onClick={handleNext} 
+                className={`flex-[2] py-4 rounded-3xl font-black text-white shadow-xl shadow-opacity-50 transition-all flex items-center justify-center gap-2 hover:scale-[1.05] active:scale-95 btn-bouncy ${steps[step].color}`}
+               >
+                 {step === steps.length - 1 ? '开始体验' : '下一步'}
+                 {step !== steps.length - 1 && <i data-lucide="chevron-right" className="w-5 h-5"></i>}
+               </button>
+            </div>
+          </div>
+          
+          {/* 关闭按钮 (模拟) */}
+          <button className="absolute top-5 right-5 p-2 text-white/50 hover:text-white hover:bg-white/20 rounded-full transition-colors z-20">
+            <i data-lucide="x" className="w-6 h-6"></i>
+          </button>
+        </div>
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<TutorialModal />);
+  </script>
+
+  <!-- 背景装饰元素 -->
+  <div class="bg-circle w-[400px] h-[400px] top-[-100px] left-[-100px]"></div>
+  <div class="bg-circle w-[300px] h-[300px] bottom-[-50px] right-[-50px]"></div>
+</body>
+</html>
